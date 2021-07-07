@@ -3,44 +3,36 @@ import re
 import bcrypt
 
 # Create your models here.
-class UserManager(models.Model):
-    def registration_validator(self, postData):
+class UserManager(models.Manager):
+    def registration_validator(self, register_data):
         errors = {}
-        if len(postData["username"]) < 5:
-            errors["username"] = "Username must be at least 5 character"
-        users = User.objects.filter(username = postData["username"])
-        if len(users) > 0:
-            errors["username"] = "Username is already registered"
-        Email_regex = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
-        if not Email_regex.match(postData['email']):
-            errors['email'] = "Incorrect email!"
-        user = User.objects.filter(email = postData['email'])
-        if len(user) > 0:
-            errors['unique_email'] = "Email already registered"
-        if len(postData["password"]) < 8:
-            errors["password"] = "Password must be at least 8 character"
-        if postData["password"] != postData["confirm"]:
-            errors["password"] = "Passwords don't match"
-
-    def login_validator(self, postData):
+        email_regex = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
+        if not email_regex.match(register_data["email"]):
+            errors["email"] = "Invalid Email Address"
+        if len(register_data["password"]) < 8:
+            errors["password"] = "Password must be at least 8 characters"
+        if register_data["password"] != register_data["confirm_password"]:
+            errors["match"] = "Passwords need to match"
+        return errors
+    
+    def login_validator(self, login_data):
         errors = {}
-        users = User.objects.filter(email = postData["email"])
+        email_regex = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
+        if not email_regex.match(login_data["email"]):
+            errors["email"] = "Invalid login"
+        users = User.objects.filter(email = login_data["email"])
         if len(users) == 0:
-            errors['no_email'] = "Email not found"
+            errors["not_found"] = "Invalid Login"
         else:
-            if bcrypt.checkpw(postData['password'].encode(), users[0].password.encode()) != True:
-                errors['login_password'] = "Incorrect password!"
+            if users[0].email != login_data["email"]:
+                errors["email_match"] = "Invalid Login"
+            if not bcrypt.checkpw(login_data["password"].encode(), users[0].endcode()):
+                errors["pw_match"] = "Invalid Login"
         return errors
 
-class User(models.model):
-    username = models.CharField(max_length = 255)
+class User(models.Model):
     email = models.CharField(max_length = 255)
     password = models.CharField(max_length = 255)
     created_at = models.DateTimeField(auto_now_add = True)
     updated_at = models.DateTimeField(auto_now = True)
-
-class Profile(models.model):
-    first_name = models.CharField(blank = True)
-    last_name = models.CharField(blank = True)
-    state = models.CharField(max_length = 2)
-    user = models.OneToOneField(User, on_delete = models.CASCADE, primary_key = True)
+    objects = UserManager()
