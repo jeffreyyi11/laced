@@ -17,7 +17,8 @@
             </ul>
         {% endif %}
         <div class="users">
-            <form>
+            <form action="/signup" method="POST">
+                {% csrf_token %}
                 <input type="hidden" name="access" value="register" />
                 <div class="inputs">
                     <label for="email">Email </label>

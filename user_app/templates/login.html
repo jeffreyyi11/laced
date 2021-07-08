@@ -19,7 +19,8 @@
             {% endif %}
         </div>
         <div class="users">
-            <form>
+            <form action="/signup" method="POST">
+                {% csrf_token %}
                 <input type="hidden" name="access" value="login" />
                 <div class="inputs">
                     <label for="email">Email </label>
