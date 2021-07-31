@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Kicks</title>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h4>Laced</h4>
+        </div>
+        {% if messages %}
+            <ul class="messages">    
+                {% for message in messages %}    
+                    <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>    
+                {% endfor %}
+            </ul>
+        {% endif %}
+        <div class="shoe_form">
+            <form action="{% url 'add_shoe' %}" method="POST">
+                {% csrf_token %}
+                <p>
+                    <label for="brand">Brand: </label>
+                    <input type="text" name="brand" />
+                </p>
+                <p>
+                    <label for="style">Style: </label>
+                    <input type="text" name="style" />
+                </p>
+                <p>
+                    <label for="color">Color: </label>
+                    <input type="text" name="color" />
+                </p>
+                <p>
+                    <label for="size">Size: </label>
+                    <input type="number" name="size" />
+                </p>
+                <p>
+                    <label for="rating">Rating: </label>
+                    <input type="number" name="rating" />
+                </p>
+                <button type="submit">Add Shoe</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

@@ -19,14 +19,14 @@ class UserManager(models.Manager):
         errors = {}
         email_regex = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
         if not email_regex.match(login_data["email"]):
-            errors["email"] = "Invalid login"
+            errors["email"] = "Invalid Login"
         users = User.objects.filter(email = login_data["email"])
         if len(users) == 0:
             errors["not_found"] = "Invalid Login"
         else:
             if users[0].email != login_data["email"]:
                 errors["email_match"] = "Invalid Login"
-            if not bcrypt.checkpw(login_data["password"].encode(), users[0].endcode()):
+            if not bcrypt.checkpw(login_data["password"].encode(), users[0].password.encode()):
                 errors["pw_match"] = "Invalid Login"
         return errors
 

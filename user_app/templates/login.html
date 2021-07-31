@@ -5,6 +5,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/login.css' %}" />
+    <script src="{% static 'js/script.js' %}"></script>
 </head>
 <body>
     <div class="container">
@@ -23,17 +26,17 @@
                 {% csrf_token %}
                 <input type="hidden" name="access" value="login" />
                 <div class="inputs">
-                    <label for="email">Email </label>
+                    <label for="email">Email: </label>
                     <input type="text" name="email" />
                 </div>
                 <div class="inputs">
-                    <label for="password">Password </label>
+                    <label for="password">Password: </label>
                     <input type="password" name="password" />
                 </div>
-                <input type="submit" value="login" />
+                <input class="submit" type="submit" value="login" />
             </form>
         </div>
-        <a href="/registration">Need to Sign Up?</a>
+        <a href="{% url 'user_signup' %}">Need to Sign Up?</a>
     </div>
 </body>
 </html>

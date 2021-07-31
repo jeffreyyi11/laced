@@ -1,0 +1,43 @@
+body {
+    background-color:lightblue; 
+    border: 1px black dotted;
+    min-height: 700px;
+    margin: 1px;
+    padding: 1px;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    width: 150px;
+    align-items: center;
+    position: fixed;
+    margin-left: 43%;
+}
+
+h1 {
+    color: white;
+}
+
+.errors li {
+    color: white;
+    list-style-type: none;
+    margin-right: 20px;
+    padding: 0px;
+}
+
+.users {
+    margin-bottom: 10px;
+}
+.users .inputs {
+    margin-bottom: 5px;
+}
+
+.users .submit {
+    margin-left: 30%;
+}
+
+a {
+    margin-left: 36%;
+    text-decoration: none;
+}

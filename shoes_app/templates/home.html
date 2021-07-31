@@ -10,8 +10,16 @@
     <div class="container">
         <h1>My Kicks</h1>
         <div class="profile">
+            <h3>My Shoes</h3>
+            <a href="{% url 'shoe_form' %}">Lace Up</a>
             <p>Shoe List</p>
+            <ul>
+                {% for shoe in shoes %}
+                    <li>{shoe.id}</li>
+                {% endfor %}
+            </ul>
         </div>
+        <a href="{% url 'sign_out' %}">Log Out</a>
     </div>
 </body>
 </html>

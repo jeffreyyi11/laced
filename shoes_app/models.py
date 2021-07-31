@@ -1,5 +1,6 @@
 from django.db import models
 from user_app.models import User
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 # Create your models here.
 class ProfileManager(models.Manager):
@@ -27,13 +28,19 @@ class ShoeManager(models.Manager):
             errors["style"] = "Please enter shoe style"
         if len(shoe_data["color"]) <= 0:
             errors["color"] = "Please enter shoe color"
+        if shoe_data['size'] < 0:
+            errors['size'] = "Please enter a shoe size"
+        if shoe_data['rating'] < 1:
+            errors['rating'] = "Please rate your shoe condition"
         return errors
 
 class Shoes(models.Model):
     brand = models.CharField(max_length = 20)
     style = models.CharField(max_length = 50)
     color = models.CharField(max_length = 50)
-    quality = models.IntegerField()
+    size = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(20)])
+    rating = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(10)])
     profile = models.ForeignKey(Profile, related_name = "shoes", on_delete = models.CASCADE)
     created_at = models.DateTimeField(auto_now_add = True)
     updated_at = models.DateTimeField(auto_now = True)
+    objects = ShoeManager()

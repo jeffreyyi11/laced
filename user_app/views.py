@@ -17,7 +17,7 @@ def signup(request):
         if len(errors) > 0:
             for key, value in errors.items():
                 messages.error(request, value)
-            return redirect("/registration")
+            return redirect("{% url 'user_signup' %}")
         else:
             hashed_pw = bcrypt.hashpw(request.POST["password"].encode(), bcrypt.gensalt()).decode()
             registered = User.objects.create(email = request.POST["email"], password = hashed_pw)
@@ -29,8 +29,13 @@ def signup(request):
         if len(errors) > 0:
             for key, value in errors.items():
                 messages.error(request, value)
-            return redirect("/")
+            return redirect("{%url 'user_login'%}")
         else:
-            user = User.objects.get(email = request.POST["email"])
-            request.session["user_id"] = user.id
-            return redirect("/shoes")
+            user = User.objects.filter(email = request.POST["email"])
+            if user: 
+                found_user = user[0]
+                if bcrypt.checkpw(request.POST['password'].encode(), found_user.password.encode()):
+                    request.session["user_id"] = found_user.id
+                    return redirect("/shoes")
+                else:
+                    return redirect("{%url 'user_login'%}")
